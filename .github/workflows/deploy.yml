@@ -1,0 +1,26 @@
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.DEPLOY_ROLE }}
+          aws-region: ap-northeast-1
+      - run: echo $BASE64_GZIP_TFVARS_JSON | base64 --decode | gzip -d > terraform.tfvars.json
+        env:
+          BASE64_GZIP_TFVARS_JSON: ${{ secrets.BASE64_GZIP_TFVARS_JSON }}
+      - run: terraform init
+      - run: terraform apply -auto-approve
