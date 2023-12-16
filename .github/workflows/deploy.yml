@@ -17,7 +17,7 @@ jobs:
           terraform_version: 1.6.4
       - uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.DEPLOY_ROLE }}
+          role-to-assume: ${{ secrets.DEPLOY_ROLE_A }}
           aws-region: ap-northeast-1
       - run: echo $BASE64_GZIP_TFVARS_JSON | base64 --decode | gzip -d > terraform.tfvars.json
         env:
