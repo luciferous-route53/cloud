@@ -1,5 +1,12 @@
 terraform {
   required_version = "~>1.6.4"
+
+  backend "s3" {
+    bucket = "luciferous-route53-prepare-bucketterraformstates-9e1ezde5g6yh"
+    key = "cloud/cloud.tfstate"
+    dynamodb_table = "luciferous-route53-prepare-TableTerraformLocks-1JTTJN9PUUZSR"
+    region = "ap-northeast-1"
+  }
 }
 
 module "common" {
